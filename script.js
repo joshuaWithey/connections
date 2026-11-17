@@ -93,6 +93,19 @@ async function bounceTile(tile) {
   await sleep(BOUNCE_TIMING / 2);
 }
 
+async function animateCategory(category) {
+  category.animate(
+    [
+      { opacity: 0, transform: "scale(1.2)" }, // Starting state (enlarged)
+      { opacity: 1, transform: "scale(1)" }, // Ending state (normal)
+    ],
+    {
+      duration: 500,
+      easing: "ease-out",
+    },
+  );
+}
+
 function shakeTile(tile) {
   tile.animate(
     [
@@ -184,16 +197,18 @@ async function moveSuccesfulAnswer(answerGroup) {
   categoryAnswers.innerHTML = `${answerGroup.answers[0]}, ${answerGroup.answers[1]}, ${answerGroup.answers[2]}, ${answerGroup.answers[3]}`;
   categoryContainer.append(categoryAnswers);
 
+  // Delete the completed tiles
+  selected.forEach((tile) => {
+    tile.parentElement.remove();
+  });
   // Prepend to the tilegroup
   tileGroup.insertBefore(
     categoryContainer,
     tileGroup.children[currentRow] || null,
   );
+  //   Animate
+  await animateCategory(categoryContainer);
 
-  // Delete the completed tiles
-  selected.forEach((tile) => {
-    tile.parentElement.remove();
-  });
   allTiles = document.querySelectorAll(".buttonTile");
   currentRow++;
   deselectAll();
