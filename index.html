@@ -10,24 +10,9 @@
   <main>
     <p class="blurb">Create four groups of four!</p>
     <div class="tileGroup">
-        <div class="buttonContainer">
-            <button class="buttonTile" onclick="buttonClick(this)">1</button>
-        </div>
-        <div class="buttonContainer">
-            <button class="buttonTile" onclick="buttonClick(this)">2</button>
-        </div>
-        <div class="buttonContainer">
-            <button class="buttonTile" onclick="buttonClick(this)">3</button>
-        </div>
-        <div class="buttonContainer">
-            <button class="buttonTile" onclick="buttonClick(this)">4</button>
-        </div>
-        <div class="buttonContainer">
-            <button class="buttonTile" onclick="buttonClick(this)">5</button>
-        </div>
     </div>
     <div class="mistakesGroup">
-        <p>Mistakes Remaining: * * * *</p>
+        <p>Mistakes Remaining: <span id="lives"></span></p>
     </div>
     <div class="controlButtons">
         <button id=""shuffleButton" onclick="shuffle()">Shuffle</button>
