@@ -2,6 +2,7 @@ Connections
 
 Pages:
 Splash Page
+
 - Logo
 - 'Connections'
 - 'group words that share a common thread.
@@ -13,6 +14,7 @@ Splash Page
 Fade animation to puzzle screen
 
 Puzzle Page
+
 - 'Create four groups of four!'
 - Tiles
 - Shuffle
@@ -26,5 +28,16 @@ Failure Page
 
 - Can only try each combination once
 
+TODO:
 
-
+- Already guessed popup X
+- One away popup X
+- Next time popup
+- Shink animation on tile press
+- Fonts
+- Remove buttons on win
+- Show results on win
+- Swap between puzzle and win page
+- Spacing
+- Replace asterisk with circle
+- Show loss page

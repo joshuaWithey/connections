@@ -1,5 +1,6 @@
 .blurb {
   text-align: center;
+  color: #121212;
 }
 .tileGroup {
   display: flex;
@@ -14,52 +15,94 @@
 .buttonTile {
   margin: 5px;
   flex: 1;
-  transition: background-color 0.4s ease, color 0.4s ease, transform 4s ease-out;
-    background-color: lightslategray;
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease,
+    transform 4s ease-out;
+  background-color: #efefe6;
   color: black;
   border-radius: 10px;
-    border: 0;
-    /* cursor: pointer; */
+  border: 0;
 }
 .selected {
-  background-color: black;
+  background-color: #5a594e;
   color: white;
 }
 .categoryContainer {
   width: 100%;
   text-align: center;
-  border: 2px solid black;
   margin: 5px;
   border-radius: 10px;
-  }
-  
-  .controlButtons button {
-    background: none;
-    border: 1px solid black;
-    border-radius: 15px;
-    margin-inline: 8px;
-    padding: 4px;
-    padding-inline: 8px;
-  }
-  
-  .mistakesGroup {
-    display: flex;
-    justify-content: center;
-  }
-  
-  .controlButtons {
-    display: flex;
-    justify-content: center;
 }
-/* .buttonTile:active {
-    transform: scale(0.9);
-    background-color: black;
-    color: white;
-} */
-/* .invalidTile {
-    pointer-events: none;
+
+.controlButtons button {
+  border-width: 1px;
+  border-style: solid;
+  background: none;
+  border-color: #121212;
+  border-radius: 15px;
+  margin-inline: 8px;
+  padding: 4px;
+  padding-inline: 8px;
 }
-.invalidButton {
-    background-color: blue;
-    pointer-events: none;
-} */
+
+.controlButtons button:disabled {
+  border-color: #979797;
+  color: #979797;
+}
+
+.mistakesGroup {
+  display: flex;
+  justify-content: center;
+  color: #5a594e;
+}
+
+.controlButtons {
+  display: flex;
+  justify-content: center;
+}
+
+.controlButtons .available {
+  background-color: #121212;
+  color: #f8f8f8;
+}
+
+.controlButtons .available:disabled {
+  color: #f8f8f8;
+}
+
+.yellow {
+  background-color: #f9df6d;
+}
+
+.purple {
+  background-color: #ba81c5;
+}
+
+.blue {
+  background-color: #b0c4ef;
+}
+.green {
+  background-color: #a0c35a;
+}
+.popupContainer {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+.popup {
+  background-color: #121212;
+  color: #f8f8f8;
+  border-radius: 4px;
+  padding: 10px;
+  padding-inline: 20px;
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  display: none;
+}
+.popup.display {
+  display: block !important;
+}

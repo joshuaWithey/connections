@@ -2,14 +2,16 @@ const MOVEMENT_TIMING = 1000;
 const BOUNCE_TIMING = 200;
 const SHAKE_TIMING = 500;
 const SHUFFLE_FADE_TIMING = 200;
+const POPUP_FADE_TIMING = 300;
+const POPUP_TIMING = 2000;
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const groups = [
-  { name: "test", answers: ["1", "2", "3", "4"] },
-  { name: "test2", answers: ["5", "6", "7", "8"] },
-  { name: "test3", answers: ["9", "10", "11", "12"] },
-  { name: "test4", answers: ["13", "14", "15", "16"] },
+  { name: "test", answers: ["1", "2", "3", "4"], color: "green" },
+  { name: "test2", answers: ["5", "6", "7", "8"], color: "yellow" },
+  { name: "test3", answers: ["9", "10", "11", "12"], color: "blue" },
+  { name: "test4", answers: ["13", "14", "15", "16"], color: "purple" },
 ];
 
 // Combine all answers and permutate
@@ -24,7 +26,7 @@ const shuffledAnswers = getRandomPermutation(combinedAnswers);
 
 const tileGroup = document.querySelector(".tileGroup");
 
-shuffledAnswers.forEach((answer, index) => {
+combinedAnswers.forEach((answer, index) => {
   const buttonContainer = document.createElement("div");
   buttonContainer.classList.add("buttonContainer");
   const button = document.createElement("button");
@@ -39,8 +41,10 @@ shuffledAnswers.forEach((answer, index) => {
   tileGroup.append(buttonContainer);
 });
 
+const shuffleButton = document.getElementById("shuffleButton");
 const submitButton = document.getElementById("submitButton");
 const deselectButton = document.getElementById("deselectButton");
+const popup = document.getElementById("popup");
 let allTiles = document.querySelectorAll(".buttonTile");
 
 const selected = [];
@@ -78,7 +82,13 @@ function buttonClick() {
       tile.disabled = false;
     });
   }
-  submitButton.disabled = selected.length !== 4;
+  if (selected.length === 4) {
+    submitButton.classList.add("available");
+    submitButton.disabled = false;
+  } else {
+    submitButton.classList.remove("available");
+    submitButton.disabled = true;
+  }
   deselectButton.disabled = selected.length === 0;
 }
 
@@ -127,7 +137,25 @@ function shakeTile(tile) {
   );
 }
 
+async function showPopupMessage(text) {
+  popup.innerHTML = text;
+  popup.classList.add("display");
+  const fadeIn = popup.animate([{ opacity: 0 }, { opacity: 1 }], {
+    duration: POPUP_FADE_TIMING,
+    easing: "ease-out",
+  });
+  await Promise.all([fadeIn.finished]);
+  await sleep(POPUP_TIMING);
+  const fadeOut = popup.animate([{ opacity: 1 }, { opacity: 0 }], {
+    duration: POPUP_FADE_TIMING,
+    easing: "ease-out",
+  });
+  await Promise.all([fadeOut.finished]);
+  popup.classList.remove("display");
+}
+
 async function submit() {
+  submitButton.disabled = true;
   // how many of the selected element match on of the groups
   selectedAnswers = selected.map((tile) => tile.innerText);
   // If we've already tried this answer, notify and return early
@@ -136,7 +164,7 @@ async function submit() {
       new Set(attemptedAnswers[i]),
     ).size;
     if (numDifferingElements === 0) {
-      console.log("ALREADY TRIED THIS ANSWER");
+      showPopupMessage("Already guessed!");
       return;
     }
   }
@@ -157,7 +185,7 @@ async function submit() {
       moveSuccesfulAnswer(groups[i]);
       return;
     } else if (numDifferingElements === 1) {
-      console.log("ONE AWAY");
+      showPopupMessage("One away...");
     }
   }
   // Shake wrong answer
@@ -165,9 +193,9 @@ async function submit() {
     shakeTile(tile);
   }
   lives--;
-  submitButton.disabled = true;
   livesSpan.innerHTML = "* ".repeat(lives);
   console.log("WRONG ANSWER");
+  submitButton.classList.remove("available");
 }
 
 async function moveSuccesfulAnswer(answerGroup) {
@@ -192,6 +220,7 @@ async function moveSuccesfulAnswer(answerGroup) {
 
   // Add new div with category
   const categoryContainer = document.createElement("div");
+  categoryContainer.classList.add(answerGroup.color);
   categoryContainer.classList.add("categoryContainer");
   categoryContainer.style.height = `${allTiles[0].offsetHeight - 5}px`;
   const categoryText = document.createElement("p");
@@ -224,6 +253,7 @@ function deselectAll() {
   });
   selected.length = 0;
   submitButton.disabled = true;
+  submitButton.classList.remove("available");
   deselectButton.disabled = true;
   enableAll();
 }
@@ -233,44 +263,28 @@ function enableAll() {
 }
 
 async function shuffle() {
+  shuffleButton.disabled = true;
   const newLayout = getRandomPermutation(allTiles);
   for (let i = 0; i < allTiles.length; i++) {
     swapElements(allTiles[i], newLayout[i]);
   }
-  let animations = [];
   for (let i = 0; i < allTiles.length; i++) {
     const innerText = allTiles[i].children[0];
-    animations.push(
-      Promise.all([
-        innerText.animate([{ opacity: 1 }, { opacity: 0 }], {
-          duration: SHUFFLE_FADE_TIMING,
-          easing: "ease-out",
-        }).finished,
-      ]),
-    );
+    innerText.animate([{ opacity: 0 }, { opacity: 1 }], {
+      duration: SHUFFLE_FADE_TIMING,
+      easing: "ease-out",
+    });
   }
-  await Promise.all(animations);
-
-  animations = [];
-  for (let i = 0; i < allTiles.length; i++) {
-    const innerText = allTiles[i].children[0];
-    animations.push(
-      Promise.all([
-        innerText.animate([{ opacity: 0 }, { opacity: 1 }], {
-          duration: SHUFFLE_FADE_TIMING,
-          easing: "ease-out",
-        }).finished,
-      ]),
-    );
-  }
+  await sleep(SHUFFLE_FADE_TIMING);
+  shuffleButton.disabled = false;
 }
 
 function getRandomPermutation(array) {
   const result = [...array]; // Copy array to avoid mutating the original
 
   for (let i = result.length - 1; i > 0; i--) {
-    // Pick a random index from 0 to i
-    const j = Math.floor(Math.random() * (i + 1));
+    // Pick a random index from 0 to i - 1
+    const j = Math.floor(Math.random() * i);
 
     // Swap elements at i and j
     [result[i], result[j]] = [result[j], result[i]];

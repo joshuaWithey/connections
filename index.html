@@ -1,25 +1,29 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Connections</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <main>
-    <p class="blurb">Create four groups of four!</p>
-    <div class="tileGroup">
-    </div>
-    <div class="mistakesGroup">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Connections</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main>
+      <div class="popupContainer">
+        <p id="popup" class="popup">TEMP</p>
+      </div>
+      <p class="blurb">Create four groups of four!</p>
+      <div class="tileGroup"></div>
+      <div class="mistakesGroup">
         <p>Mistakes Remaining: <span id="lives"></span></p>
-    </div>
-    <div class="controlButtons">
-        <button id=""shuffleButton" onclick="shuffle()">Shuffle</button>
-        <button id="deselectButton" disabled onclick="deselectAll()">Deselect All</button>
+      </div>
+      <div class="controlButtons">
+        <button id="shuffleButton" onclick="shuffle()">Shuffle</button>
+        <button id="deselectButton" disabled onclick="deselectAll()">
+          Deselect All
+        </button>
         <button id="submitButton" disabled onclick="submit()">Submit</button>
-    </div>
-  </main>
-  <script src="script.js"></script>
-</body>
+      </div>
+    </main>
+    <script src="script.js"></script>
+  </body>
 </html>
