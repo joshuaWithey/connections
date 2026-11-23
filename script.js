@@ -1,6 +1,7 @@
 const MOVEMENT_TIMING = 1000;
 const BOUNCE_TIMING = 200;
 const SHAKE_TIMING = 500;
+const SHUFFLE_FADE_TIMING = 200;
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -30,7 +31,10 @@ shuffledAnswers.forEach((answer, index) => {
   button.classList.add("buttonTile");
   button.id = `tile_${index}`;
   button.addEventListener("click", buttonClick);
-  button.innerHTML = answer;
+  const buttonText = document.createElement("span");
+  buttonText.classList.add("tileText");
+  buttonText.innerHTML = answer;
+  button.append(buttonText);
   buttonContainer.append(button);
   tileGroup.append(buttonContainer);
 });
@@ -228,10 +232,36 @@ function enableAll() {
   allTiles.forEach((tile) => (tile.disabled = false));
 }
 
-function shuffle() {
+async function shuffle() {
   const newLayout = getRandomPermutation(allTiles);
   for (let i = 0; i < allTiles.length; i++) {
     swapElements(allTiles[i], newLayout[i]);
+  }
+  let animations = [];
+  for (let i = 0; i < allTiles.length; i++) {
+    const innerText = allTiles[i].children[0];
+    animations.push(
+      Promise.all([
+        innerText.animate([{ opacity: 1 }, { opacity: 0 }], {
+          duration: SHUFFLE_FADE_TIMING,
+          easing: "ease-out",
+        }).finished,
+      ]),
+    );
+  }
+  await Promise.all(animations);
+
+  animations = [];
+  for (let i = 0; i < allTiles.length; i++) {
+    const innerText = allTiles[i].children[0];
+    animations.push(
+      Promise.all([
+        innerText.animate([{ opacity: 0 }, { opacity: 1 }], {
+          duration: SHUFFLE_FADE_TIMING,
+          easing: "ease-out",
+        }).finished,
+      ]),
+    );
   }
 }
 
@@ -264,14 +294,7 @@ function swapElementsAnimated(el1, el2) {
   const rectA = el1.getBoundingClientRect();
   const rectB = el2.getBoundingClientRect();
 
-  // Create a temporary placeholder
-  const temp = document.createElement("div");
-  // Put the placeholder where el1 is
-  el1.replaceWith(temp);
-  // Move el1 to where el2 is
-  el2.replaceWith(el1);
-  // Move el2 to the placeholder's spot
-  temp.replaceWith(el2);
+  swapElements(el1, el2);
 
   // Measure their new positions immediately after the swap
   const newRectA = el1.getBoundingClientRect();
