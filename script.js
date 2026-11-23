@@ -33,6 +33,7 @@ combinedAnswers.forEach((answer, index) => {
   button.classList.add("buttonTile");
   button.id = `tile_${index}`;
   button.addEventListener("click", buttonClick);
+  button.addEventListener("pointerdown", tilePress);
   const buttonText = document.createElement("span");
   buttonText.classList.add("tileText");
   buttonText.innerHTML = answer;
@@ -152,6 +153,10 @@ async function showPopupMessage(text) {
   });
   await Promise.all([fadeOut.finished]);
   popup.classList.remove("display");
+}
+
+function tilePress(event) {
+  console.log("HI");
 }
 
 async function submit() {
