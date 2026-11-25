@@ -5,6 +5,8 @@ const SHUFFLE_FADE_TIMING = 200;
 const POPUP_FADE_TIMING = 300;
 const POPUP_TIMING = 2000;
 
+const svgNS = "http://www.w3.org/2000/svg";
+
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const groups = [
@@ -53,8 +55,24 @@ let currentRow = 0;
 let lives = 4;
 const attemptedAnswers = [];
 
+
 const livesSpan = document.getElementById("lives");
-livesSpan.innerHTML = "* ".repeat(lives);
+for (let i = 0; i < lives; i++) {
+  const circleSvg = document.createElementNS(svgNS, "svg");
+  circleSvg.setAttribute("width", "15");
+  circleSvg.setAttribute("height", "10");
+  const circle = document.createElementNS(svgNS, "circle");
+  circle.setAttribute("cx", "5");
+  circle.setAttribute("cy", "5");
+  circle.setAttribute("r", "5");
+  circle.setAttribute("fill", "royalblue");
+  // circle.setAttribute("stroke", "navy");
+  // circle.setAttribute("stroke-width", "4");
+  circleSvg.append(circle);
+  livesSpan.append(circleSvg);
+}
+
+
 
 let tileAnimationActive = null;
 
