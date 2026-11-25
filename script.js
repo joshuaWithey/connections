@@ -65,9 +65,7 @@ for (let i = 0; i < lives; i++) {
   circle.setAttribute("cx", "5");
   circle.setAttribute("cy", "5");
   circle.setAttribute("r", "5");
-  circle.setAttribute("fill", "royalblue");
-  // circle.setAttribute("stroke", "navy");
-  // circle.setAttribute("stroke-width", "4");
+  circle.setAttribute("fill", "#5a594e");
   circleSvg.append(circle);
   livesSpan.append(circleSvg);
 }
@@ -207,7 +205,6 @@ async function submit() {
       new Set(groups[i].answers),
     ).size;
     if (numDifferingElements === 0) {
-      console.log("SUCCESS");
       moveSuccesfulAnswer(groups[i]);
       return;
     } else if (numDifferingElements === 1) {
@@ -219,8 +216,7 @@ async function submit() {
     shakeTile(tile);
   }
   lives--;
-  livesSpan.innerHTML = "* ".repeat(lives);
-  console.log("WRONG ANSWER");
+  livesSpan.removeChild(livesSpan.firstElementChild);
   submitButton.classList.remove("available");
 }
 
