@@ -32,7 +32,7 @@ combinedAnswers.forEach((answer, index) => {
   const button = document.createElement("button");
   button.classList.add("buttonTile");
   button.id = `tile_${index}`;
-  button.addEventListener("pointerup", buttonClick);
+  button.addEventListener("pointerup", tileRelease);
   button.addEventListener("pointerdown", tilePress);
   const buttonText = document.createElement("span");
   buttonText.classList.add("tileText");
@@ -58,19 +58,7 @@ livesSpan.innerHTML = "* ".repeat(lives);
 
 let tileAnimationActive = null;
 
-function buttonClick() {
-  // if (this.classList.contains("selected")) {
-  //   this.classList.remove("selected");
-  //   const index = selected.findIndex(
-  //     (item) => item.innerText === this.innerText,
-  //   );
-  //   if (index !== -1) {
-  //     selected.splice(index, 1);
-  //   }
-  // } else {
-  //   selected.push(this);
-  //   this.classList.add("selected");
-  // }
+function tileRelease() {
   if (selected.length === 4) {
     // Get all elements that aren't selected and make them non clickable
     const unClickedTiles = document.querySelectorAll(
@@ -93,9 +81,10 @@ function buttonClick() {
     submitButton.disabled = true;
   }
   deselectButton.disabled = selected.length === 0;
+  this.classList.remove("isHeld");
 }
 
-function tilePress(event) {
+function tilePress() {
   if (this.classList.contains("selected")) {
     this.classList.remove("selected");
     const index = selected.findIndex(
@@ -108,18 +97,7 @@ function tilePress(event) {
     selected.push(this);
     this.classList.add("selected");
   }
-  // Shrink the element
-  this.animate(
-    [
-      { transform: "scale(1)" }, // Starting state (enlarged)
-      { transform: "scale(0.8)" }, // Ending state (normal)
-    ],
-    {
-      duration: 500,
-      easing: "ease-out",
-      fill: "forwards",
-    },
-  );
+  this.classList.add("isHeld");
 }
 
 async function bounceTile(tile) {

@@ -33,7 +33,7 @@ TODO:
 - Already guessed popup X
 - One away popup X
 - Next time popup
-- Shink animation on tile press
+- Shink animation on tile press X
 - Fonts
 - Remove buttons on win
 - Show results on win
