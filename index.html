@@ -5,24 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Connections</title>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Commissioner:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <main>
-      <div class="popupContainer">
-        <p id="popup" class="popup">TEMP</p>
+      <div id="splash">
+        <h1>Connections</h1>
+        <h2 id="splashH2">Group words that share a common threads.</h2>
+        <button id="playButton" onClick="startPuzzle()">Play</button>
+        <p id="splashDate">December 8, 2026</p>
+        <p id="splashNumber">No. 1</p>
+        <p id="splashAuthor">By Joshua Withey</p>
       </div>
-      <p class="blurb">Create four groups of four!</p>
-      <div class="tileGroup"></div>
-      <div class="mistakesGroup">
-        <p>Mistakes Remaining: <span id="lives"></span></p>
+      <div id="puzzlePage">
+        <div class="popupContainer">
+          <p id="popup" class="popup">TEMP</p>
+        </div>
+        <p class="blurb">Create four groups of four!</p>
+        <div class="tileGroup"></div>
+        <div id="mistakesGroup">
+          <p>Mistakes Remaining: <span id="lives"></span></p>
+        </div>
+        <div class="controlButtons">
+          <button id="shuffleButton" onclick="shuffle()">Shuffle</button>
+          <button id="deselectButton" disabled onclick="deselectAll()">
+            Deselect All
+          </button>
+          <button id="submitButton" disabled onclick="submit()">Submit</button>
+          <button id="resultsButton">View Results</button>
+        </div>
       </div>
-      <div class="controlButtons">
-        <button id="shuffleButton" onclick="shuffle()">Shuffle</button>
-        <button id="deselectButton" disabled onclick="deselectAll()">
-          Deselect All
-        </button>
-        <button id="submitButton" disabled onclick="submit()">Submit</button>
-      </div>
+      <div id="resultsPage"></div>
     </main>
     <script src="script.js"></script>
   </body>

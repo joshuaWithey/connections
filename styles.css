@@ -1,3 +1,40 @@
+body {
+  font-family: "Commissioner", sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+#splash {
+  position: fixed;
+  inset: 0;
+  /* Shorthand for top: 0, right: 0, bottom: 0, left: 0 */
+  background-color: #ba81c5;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition:
+    opacity 0.6s ease,
+    visibility 0.6s ease;
+}
+
+#splash h2 {
+  text-align: center;
+}
+
+/* Class added by JS to hide the splash screen */
+#splash.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
 .blurb {
   text-align: center;
   color: #121212;
@@ -54,7 +91,7 @@
   color: #979797;
 }
 
-.mistakesGroup {
+#mistakesGroup {
   display: flex;
   justify-content: center;
   color: #5a594e;
@@ -108,4 +145,7 @@
 }
 .popup.display {
   display: block !important;
+}
+#resultsButton {
+  display: none;
 }

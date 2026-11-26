@@ -41,3 +41,4 @@ TODO:
 - Spacing
 - Replace asterisk with circle
 - Show loss page
+- Solve the puzzle on loss

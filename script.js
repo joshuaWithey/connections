@@ -9,19 +9,24 @@ const svgNS = "http://www.w3.org/2000/svg";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const groups = [
-  { name: "test", answers: ["1", "2", "3", "4"], color: "green" },
-  { name: "test2", answers: ["5", "6", "7", "8"], color: "yellow" },
-  { name: "test3", answers: ["9", "10", "11", "12"], color: "blue" },
-  { name: "test4", answers: ["13", "14", "15", "16"], color: "purple" },
-];
+const data = {
+  puzzleDate: "08/12/2026",
+  author: "Joshua Withey",
+  puzzleNumber: 1,
+  groups: [
+    { name: "test", answers: ["1", "2", "3", "4"], color: "green" },
+    { name: "test2", answers: ["5", "6", "7", "8"], color: "yellow" },
+    { name: "test3", answers: ["9", "10", "11", "12"], color: "blue" },
+    { name: "test4", answers: ["13", "14", "15", "16"], color: "purple" },
+  ],
+};
 
 // Combine all answers and permutate
 const combinedAnswers = [
-  ...groups[0].answers,
-  ...groups[1].answers,
-  ...groups[2].answers,
-  ...groups[3].answers,
+  ...data.groups[0].answers,
+  ...data.groups[1].answers,
+  ...data.groups[2].answers,
+  ...data.groups[3].answers,
 ];
 
 const shuffledAnswers = getRandomPermutation(combinedAnswers);
@@ -44,16 +49,29 @@ combinedAnswers.forEach((answer, index) => {
   tileGroup.append(buttonContainer);
 });
 
+const splashPage = document.getElementById("splash");
 const shuffleButton = document.getElementById("shuffleButton");
 const submitButton = document.getElementById("submitButton");
 const deselectButton = document.getElementById("deselectButton");
+const resultsButton = document.getElementById("resultsButton");
 const popup = document.getElementById("popup");
 let allTiles = document.querySelectorAll(".buttonTile");
+const mistakesGroup = document.getElementById("mistakesGroup");
 
 const selected = [];
 let currentRow = 0;
-let lives = 4;
+let lives = 0;
 const attemptedAnswers = [];
+let solved = false;
+
+// Set item visibility based on the loaded state
+if (lives === 0 || solved === true) {
+  shuffleButton.style.display = "none";
+  submitButton.style.display = "none";
+  deselectButton.style.display = "none";
+  resultsButton.style.display = "block";
+  mistakesGroup.style.display = "none";
+}
 
 
 const livesSpan = document.getElementById("lives");
@@ -70,9 +88,9 @@ for (let i = 0; i < lives; i++) {
   livesSpan.append(circleSvg);
 }
 
-
-
-let tileAnimationActive = null;
+function startPuzzle() {
+  splashPage.classList.add("hidden");
+}
 
 function tileRelease() {
   if (selected.length === 4) {
@@ -200,13 +218,15 @@ async function submit() {
   await sleep(500);
 
   attemptedAnswers.push(selectedAnswers);
-  for (let i = 0; i < groups.length; i++) {
+  for (let i = 0; i < data.groups.length; i++) {
     const numDifferingElements = new Set(selectedAnswers).difference(
-      new Set(groups[i].answers),
+      new Set(data.groups[i].answers),
     ).size;
     if (numDifferingElements === 0) {
-      moveSuccesfulAnswer(groups[i]);
+      moveSuccesfulAnswer(data.groups[i]);
       return;
+    } else if (lives === 1) {
+      showPopupMessage("Next time...");
     } else if (numDifferingElements === 1) {
       showPopupMessage("One away...");
     }
@@ -218,6 +238,15 @@ async function submit() {
   lives--;
   livesSpan.removeChild(livesSpan.firstElementChild);
   submitButton.classList.remove("available");
+  if (lives === 0) {
+    puzzleLost();
+  }
+}
+
+function puzzleLost() {
+  console.log("You lost");
+  // Hide buttons
+  // Move the correct answers
 }
 
 async function moveSuccesfulAnswer(answerGroup) {
